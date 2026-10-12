@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Actividad 01 - Java Threads</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 800px; margin: 30px auto; padding: 0 15px; line-height: 1.5; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+  th, td { border: 1px solid #999; padding: 6px 10px; }
+  th { background: #eee; }
+</style>
+</head>
+<body>
+
+<h1>Actividad 01 - Procesamiento secuencial y paralelo con Java Threads</h1>
+<p><b>Estudiante:</b> Erika Contreras &nbsp; | &nbsp; <b>Repositorio:</b> <a href="https://github.com/ErikaContreras15/ComputacionP_Practica01">https://github.com/ErikaContreras15/ComputacionP_Practica01</a></p>
+
+<h2>1. Descripción</h2>
+<p>El programa lee el libro <i>Don Quijote de la Mancha</i> y cuenta el total de palabras, cuántas veces aparece
+"quijote" y cuántas palabras contienen "ción". No distingue mayúsculas de minúsculas.</p>
+<ul>
+  <li><b>Secuencial:</b> se recorre todo el texto con un solo hilo.</li>
+  <li><b>Paralelo:</b> el texto se divide en partes (sin cortar palabras) y cada parte la procesa un hilo
+      (<code>Thread</code>). Al final se usa <code>join()</code> y se suman los resultados.</li>
+  <li><b>Medición:</b> con <code>System.nanoTime()</code>, sin contar la lectura del archivo. Primero se hacen
+      3 rondas de calentamiento y luego se promedian 5 repeticiones.</li>
+  <li><b>Texto ampliado:</b> el libro repetido 100 veces.</li>
+</ul>
+<p><b>Resultados del conteo:</b> 214739 palabras, 1079 apariciones de "quijote" y 564 palabras con "ción".
+Las versiones con 2 y 4 hilos dieron los mismos resultados.</p>
+
+<h2>2. Equipo utilizado</h2>
+<table>
+  <tr><th>Procesador</th><td>Intel Core Ultra 9 275HX</td></tr>
+  <tr><th>Núcleos</th><td>24 núcleos / 24 hilos (8 de rendimiento y 16 de eficiencia)</td></tr>
+  <tr><th>Memoria RAM</th><td>32 GB</td></tr></table>
+
+<h2>3. Resultados</h2>
+<p>Los tiempos son el promedio de 3 ejecuciones del programa. Aceleración = tiempo secuencial / tiempo paralelo.</p>
+<table>
+  <tr><th>Conjunto</th><th>Hilos</th><th>Tiempo promedio (ms)</th><th>Aceleración</th></tr>
+  <tr><td>Original</td><td>1 (secuencial)</td><td>8.46</td><td>1.00</td></tr>
+  <tr><td>Original</td><td>2</td><td>4.79</td><td>1.77</td></tr>
+  <tr><td>Original</td><td>4</td><td>2.48</td><td>3.41</td></tr>
+  <tr><td>Ampliado (100 veces)</td><td>1 (secuencial)</td><td>782.63</td><td>1.00</td></tr>
+  <tr><td>Ampliado (100 veces)</td><td>2</td><td>401.89</td><td>1.95</td></tr>
+  <tr><td>Ampliado (100 veces)</td><td>4</td><td>208.82</td><td>3.75</td></tr>
+</table>
+
+<h2>4. Preguntas</h2>
+<p><b>1. ¿Qué diferencias hay entre los tiempos secuencial y paralelo?</b><br>
+La versión paralela fue más rápida en los dos casos. Con el texto original la aceleración fue de 1.77 con 2 hilos
+y 3.41 con 4 hilos. Con el texto ampliado fue de 1.95 y 3.75, casi el doble y casi cuatro veces más rápido.
+Con el texto original los tiempos variaron más entre ejecuciones porque el trabajo dura muy poco (unos 8 ms).</p>
+
+<p><b>2. ¿Cómo influye el número de hilos?</b><br>
+Más hilos reducen el tiempo siempre que haya núcleos suficientes. Este equipo tiene 24 núcleos, así que con
+2 y 4 hilos cada hilo pudo usar su propio núcleo y la aceleración quedó cerca de 2 y 4.</p>
+
+<p><b>3. ¿Qué pasa al aumentar el tamaño del documento?</b><br>
+El tiempo crece casi en proporción al tamaño, pero la aceleración mejora. Con más texto, el costo de manejar los
+hilos se vuelve pequeño comparado con el trabajo real.</p>
+
+<p><b>4. ¿El procesamiento paralelo siempre es más rápido?</b><br>
+No. Con textos pequeños el costo de crear hilos puede ser mayor que lo que se ahorra, y usar más hilos que núcleos
+no ayuda.</p>
+
+<h2>5. Conclusiones</h2>
+<p>El procesamiento paralelo redujo el tiempo de ejecución en todos los casos, y con 2 y 4 hilos se obtuvieron
+los mismos resultados que con la versión secuencial. La aceleración aumentó con el número de hilos, aunque no llegó
+a ser perfecta porque crear los hilos, esperarlos y juntar los resultados también toma tiempo. Este costo se nota
+más con el texto original, donde con 4 hilos la aceleración fue de 3.41, que con el texto ampliado, donde llegó a
+3.75. Por eso, el paralelismo conviene más cuando hay muchos datos que procesar y núcleos suficientes para repartir
+el trabajo.</p>
+
+</body>
+</html>
